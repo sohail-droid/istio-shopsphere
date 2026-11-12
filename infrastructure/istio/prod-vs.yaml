@@ -1,72 +1,99 @@
-apiVersion: networking.istio.io/v1
-kind: VirtualService             #Where should this request go?
-metadata:
-  name: product-service
-  namespace: shopsphere
-spec:
-  hosts:
-    - product-service
-  http:
-    - route:
-        - destination:
-            host: product-service
-            subset: v1
-          weight: 80
-        - destination:
-            host: product-service
-            subset: v2
-          weight: 20
+##Canary edployments, A/B testing, traffic mirroring, header/path-based routing, retries, timeouts, fault injection, rewrites
+
+# apiVersion: networking.istio.io/v1
+# kind: VirtualService             ##Where should this request go?
+# metadata:
+#   name: product-service
+#   namespace: shopsphere
+# spec:
+#   hosts:
+#     - product-service
+#   http:
+#     - route:
+#         - destination:
+#             host: product-service
+#             subset: v1
+#           weight: 80
+#         - destination:
+#             host: product-service
+#             subset: v2
+#           weight: 20
   
-# Example A: Header-based routing
+##----------------------------------------------------------
+## Example A: Header-based routing
 
-  http:
-  - match:
-      - headers:
-          x-user-type:
-            exact: tester
-    route:
-      - destination:
-          host: product-service
-          subset: v2
+# apiVersion: networking.istio.io/v1
+# kind: VirtualService
+# metadata:
+#   name: product-service
+#   namespace: shopsphere
+# spec:
+#   hosts:
+#     - product-service
+#   http:
+#     # Rule 1: Testers always receive v2
+#     - match:
+#         - headers:
+#             x-user-type:
+#               exact: tester
+#       route:
+#         - destination:
+#             host: product-service
+#             subset: v2
 
-  - route:
-      - destination:
-          host: product-service
-          subset: v1
+#     # Rule 2: Everyone else receives v1
+#     - route:
+#         - destination:
+#             host: product-service
+#             subset: v1
  
-# Example B: Retry and timeout
-http:
-  - route:
-      - destination:
-          host: product-service
-          subset: v1
 
-    timeout: 3s
+## kubectl exec -n shopsphere deploy/api-gateway \
+##   -c api-gateway -- \
+##   python -c "import urllib.request; r=urllib.request.Request('http://product-service:8000/version',headers={'x-user-type':'tester'}); print(urllib.request.urlopen(r).read().decode())"
 
-    retries:
-      attempts: 3
-      perTryTimeout: 1s
+## kubectl exec -n shopsphere deploy/api-gateway -c api-gateway -- \
+##  python -c "import urllib.request; print(urllib.request.urlopen('http://product-service:8000/products').read().decode())"
 
 
-Example C: Traffic mirroring
+##----------------------------------------------------------#----------------------------------------------------------
+# Example C: Traffic mirroring
 
-http:
-  - route:
-      - destination:
-          host: product-service
-          subset: v1
-        weight: 100
+# apiVersion: networking.istio.io/v1
+# kind: VirtualService
+# metadata:
+#   name: product-service
+#   namespace: shopsphere
+# spec:
+#   hosts:
+#     - product-service
+#   http:
+#     - route:
+#         - destination:
+#             host: product-service
+#             subset: v1
+#           weight: 100
 
-    mirror:
-      host: product-service
-      subset: v2
+#       mirror:
+#         host: product-service
+#         subset: v2     #Istio copies the requests to v2.
 
-    mirrorPercentage:
-      value: 100
+#       mirrorPercentage:
+#         value: 100       #Mirror 100% of eligible requests.
 
-      
- #Path/Header matching, canary weight splits, 
- #retries, timeouts, fault injection, rewrites
 
-#  A standard Kubernetes Service can actually send traffic to multiple versions at the same time, 
-#  but it cannot control the exact percentage independently of the number of pods, nor can it route based on HTTP headers or paths.
+##----------------------------------------------------------
+# # Example B: Retry and timeout
+# spec:
+#   hosts:
+#     - my-service
+#   http:
+#     - route:
+#         - destination:
+#             host: my-service
+#             port:
+#               number: 8080
+#       retries:
+#         attempts: 3
+#         perTryTimeout: 2s
+#         retryOn: "5xx"

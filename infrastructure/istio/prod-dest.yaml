@@ -1,5 +1,62 @@
+# apiVersion: networking.istio.io/v1
+# kind: DestinationRule   #how traffic behaves once it gets there (policies and subset definitions).
+# metadata:
+#   name: product-service
+#   namespace: shopsphere
+# spec:
+#   host: product-service
+
+#   trafficPolicy:
+#     loadBalancer:
+#       simple: ROUND_ROBIN   #LEAST_REQUEST, RANDOM, CONSISTENT_HASH
+
+#   subsets:
+#     - name: v1
+#       labels:
+#         version: v1
+
+#     - name: v2
+#       labels:
+#         version: v2
+
+#----------------------------------------------------------
+
+#CIRCUIT BREAKING
+
+# apiVersion: networking.istio.io/v1
+# kind: DestinationRule
+# metadata:
+#   name: product-service
+#   namespace: shopsphere
+# spec:
+#   host: product-service
+
+#   trafficPolicy:
+#     loadBalancer:
+#       simple: ROUND_ROBIN
+
+#     connectionPool:
+#       tcp:
+#         maxConnections: 1
+#       http:
+#         http1MaxPendingRequests: 1
+#         http2MaxRequests: 1
+
+#   subsets:
+#     - name: v1
+#       labels:
+#         version: v1
+
+#     - name: v2
+#       labels:
+#         version: v2
+# #----------------------------------------------------------
+
+# # Example C: Outlier detection
+# # Automatically identifies unhealthy service instances and temporarily removes them from load balancing.
+
 apiVersion: networking.istio.io/v1
-kind: DestinationRule   #how traffic behaves once it gets there (policies and subset definitions).
+kind: DestinationRule
 metadata:
   name: product-service
   namespace: shopsphere
@@ -8,38 +65,42 @@ spec:
 
   trafficPolicy:
     loadBalancer:
-      simple: ROUND_ROBIN   #LEAST_REQUEST, RANDOM, CONSISTENT_HASH
+      simple: ROUND_ROBIN
+
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 100
+        http2MaxRequests: 100
 
   subsets:
     - name: v1
       labels:
         version: v1
+      trafficPolicy:
+        outlierDetection:
+          consecutive5xxErrors: 5
+          interval: 5s
+          baseEjectionTime: 30s
+          maxEjectionPercent: 50
 
     - name: v2
       labels:
         version: v2
 
 
-# Example B: Connection pool limits
-# This controls how many connections and pending requests Envoy allows towards the destination.
-trafficPolicy:
-  connectionPool:
-    tcp:
-      maxConnections: 100
-    http:
-      http1MaxPendingRequests: 50
-      http2MaxRequests: 100
-      maxRequestsPerConnection: 10
-
-# Example C: Outlier detection
-# Automatically identifying unhealthy endpoints and removing them temporarily from load balancing.
-trafficPolicy:
-  outlierDetection:
-    consecutive5xxErrors: 5
-    interval: 10s
-    baseEjectionTime: 30s
-    maxEjectionPercent: 50
+# # Example B: Connection pool limits
+# # This controls how many connections and pending requests Envoy allows towards the destination.
+# trafficPolicy:
+#   connectionPool:
+#     tcp:
+#       maxConnections: 100
+#     http:
+#       http1MaxPendingRequests: 50
+#       http2MaxRequests: 100
+#       maxRequestsPerConnection: 10
 
 
-# Pod subsets (v1/v2 labels), load balancing algorithms,
-#  mTLS settings, connection pools, circuit breaking
+# # Pod subsets (v1/v2 labels), load balancing algorithms,
+# #  mTLS settings, connection pools, circuit breaking
