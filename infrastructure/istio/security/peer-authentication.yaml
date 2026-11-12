@@ -1,0 +1,8 @@
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: shopsphere-strict-mtls
+  namespace: shopsphere
+spec:
+  mtls:
+    mode: STRICT
