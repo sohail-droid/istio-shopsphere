@@ -1,0 +1,72 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService             #Where should this request go?
+metadata:
+  name: product-service
+  namespace: shopsphere
+spec:
+  hosts:
+    - product-service
+  http:
+    - route:
+        - destination:
+            host: product-service
+            subset: v1
+          weight: 80
+        - destination:
+            host: product-service
+            subset: v2
+          weight: 20
+  
+# Example A: Header-based routing
+
+  http:
+  - match:
+      - headers:
+          x-user-type:
+            exact: tester
+    route:
+      - destination:
+          host: product-service
+          subset: v2
+
+  - route:
+      - destination:
+          host: product-service
+          subset: v1
+ 
+# Example B: Retry and timeout
+http:
+  - route:
+      - destination:
+          host: product-service
+          subset: v1
+
+    timeout: 3s
+
+    retries:
+      attempts: 3
+      perTryTimeout: 1s
+
+
+Example C: Traffic mirroring
+
+http:
+  - route:
+      - destination:
+          host: product-service
+          subset: v1
+        weight: 100
+
+    mirror:
+      host: product-service
+      subset: v2
+
+    mirrorPercentage:
+      value: 100
+
+      
+ #Path/Header matching, canary weight splits, 
+ #retries, timeouts, fault injection, rewrites
+
+#  A standard Kubernetes Service can actually send traffic to multiple versions at the same time, 
+#  but it cannot control the exact percentage independently of the number of pods, nor can it route based on HTTP headers or paths.

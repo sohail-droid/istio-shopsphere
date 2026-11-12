@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShopSphere</title>
+<style>
+:root{--brand:#4f46e5;--brand-d:#4338ca;--brand-l:#eef2ff;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--bg:#f6f7fb}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer;border:0}
+button:disabled{opacity:.5;cursor:not-allowed}
+/* ============ V1 (classic) ============ */
+header{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.logo{display:flex;align-items:center;gap:12px;background:none}
+.logo .mark{width:40px;height:40px;border-radius:12px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px}
+.logo b{font-size:20px;font-weight:900;letter-spacing:-.5px}.logo b span{color:var(--brand)}
+.logo small{display:block;color:var(--mut);font-size:12px;text-align:left}
+nav{display:flex;gap:6px;align-items:center}
+nav button{padding:8px 13px;border-radius:9px;background:none;color:#475569;font-weight:600;font-size:14px}
+nav button:hover{background:#f1f5f9}nav button.on{background:var(--brand-l);color:var(--brand-d)}
+nav .cart{background:var(--ink);color:#fff;margin-left:6px;padding:9px 15px}
+nav .cart i{font-style:normal;background:var(--brand);border-radius:99px;padding:2px 8px;font-size:12px;margin-left:8px}
+main{padding:28px 0 10px}
+.hero{border-radius:24px;padding:54px 48px;color:#fff;background:linear-gradient(110deg,#020617,#1e1b4b 55%,#4f46e5);margin-bottom:34px}
+.hero .tag{display:inline-block;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);border-radius:99px;padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.08em}
+.hero h1{font-size:46px;line-height:1.1;margin:14px 0;font-weight:900}
+.hero p{max-width:480px;color:#c7d2fe;line-height:1.6}
+.hero button{margin-top:22px;background:#fff;color:var(--brand-d);font-weight:700;border-radius:12px;padding:12px 20px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:18px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+h2{margin:4px 0 0;font-size:26px;font-weight:900}.sub{color:var(--mut);font-size:14px;margin:4px 0 0}
+.ghost{background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 14px;font-weight:600;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:.2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(15,23,42,.1)}
+.pic{height:170px;display:grid;place-items:center;font-size:72px}
+.p0{background:linear-gradient(135deg,#f1f5f9,#e0e7ff)}.p1{background:linear-gradient(135deg,#f1f5f9,#cffafe)}.p2{background:linear-gradient(135deg,#f1f5f9,#ede9fe)}
+.body{padding:18px}
+.row{display:flex;justify-content:space-between;align-items:center}
+.chip{background:var(--brand-l);color:var(--brand-d);font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px}
+.stock{font-size:12px;font-weight:600;color:#15803d}.stock.out{color:#dc2626}
+.card h3{margin:12px 0 4px;font-size:18px}.card p{margin:0;color:var(--mut);font-size:14px;min-height:40px}
+.price{font-size:22px;font-weight:900}
+.add{background:var(--brand);color:#fff;font-weight:700;border-radius:12px;padding:10px 16px}.add:hover{background:var(--brand-d)}
+.step{display:flex;align-items:center;gap:12px;background:#f1f5f9;border-radius:12px;padding:4px}
+.step button{width:32px;height:32px;border-radius:9px;background:#fff;font-weight:700}
+.two{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:34px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;height:fit-content}
+.panel h2{font-size:20px;margin:0}
+.line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #f1f5f9}
+.empty{text-align:center;color:#94a3b8;font-size:14px;padding:36px 0}
+.tot{display:flex;justify-content:space-between;font-size:18px;font-weight:900;border-top:1px solid #f1f5f9;margin-top:14px;padding-top:14px}
+.sim{display:flex;gap:10px;background:#fffbeb;border-radius:12px;padding:12px;margin-top:18px;font-size:14px;cursor:pointer}
+.sim b{display:block;color:#78350f}.sim span{font-size:12px;color:#92400e}
+.place{width:100%;margin-top:18px;background:var(--brand);color:#fff;font-weight:700;border-radius:12px;padding:13px}
+.note{margin-bottom:18px;padding:14px 16px;border-radius:12px;font-size:14px;display:flex;justify-content:space-between;gap:12px}
+.note.ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}.note.bad{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c}
+.note button{background:none;font-weight:700;color:inherit}
+.order{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:14px}
+.mono{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;word-break:break-all}
+.badge{border-radius:99px;padding:4px 12px;font-size:12px;font-weight:700}
+.CONFIRMED{background:#f0fdf4;color:#166534}.PAYMENT_FAILED{background:#fef2f2;color:#b91c1c}.PENDING_PAYMENT{background:#fffbeb;color:#92400e}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid #f1f5f9;margin-top:14px;padding-top:14px}
+.cols small{display:block;color:#94a3b8;font-size:12px}.cols div div{font-weight:600;margin-top:3px}
+.svc{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:22px}
+.dot{width:12px;height:12px;border-radius:50%;background:#22c55e}.dot.bad{background:#ef4444}
+footer{margin-top:44px;border-top:1px solid var(--line);background:#fff;color:#94a3b8;font-size:12px;padding:22px 0}
+@media(max-width:820px){.two{grid-template-columns:1fr}.hero{padding:34px 24px}.hero h1{font-size:32px}.logo small{display:none}}
+
+/* ============ V2 (canary): sidebar shell, list catalogue, cart drawer ============ */
+#v2{display:none;--bg2:#eef3ef;--ink2:#12241f;--mut2:#5d726b;--acc:#0f766e;--hot:#e8512b;--ln:#cfdcd5;--pan:#fbfdfb;
+  min-height:100vh;background:var(--bg2);color:var(--ink2);grid-template-columns:232px 1fr}
+body.is-v2{background:#eef3ef}
+body.is-v2 #v1{display:none}body.is-v2 #v2{display:grid}
+#v2 .sb{position:sticky;top:0;height:100vh;background:#12241f;color:#dbe8e2;padding:26px 18px;display:flex;flex-direction:column;gap:6px}
+#v2 .bd{display:flex;align-items:center;gap:10px;font-family:Georgia,"Iowan Old Style",serif;font-size:21px;color:#fff;margin-bottom:4px}
+#v2 .bm{width:30px;height:30px;border-radius:8px;background:var(--hot);display:grid;place-items:center;font:700 16px system-ui}
+#v2 .can{font-style:normal;font-size:12px;color:#8fb3a6;margin:0 0 22px 40px}
+#v2 .sb button.nv{display:flex;align-items:center;gap:10px;background:none;color:#b9cfc6;padding:10px 12px;border-radius:8px;text-align:left;font-size:15px}
+#v2 .sb button.nv:hover{background:#1c342d}#v2 .sb button.nv.on{background:#e8f3ee;color:#12241f;font-weight:600}
+#v2 .sb .bt{margin-top:auto;background:var(--hot);color:#fff;font-weight:600;padding:13px 14px;border-radius:10px;display:flex;justify-content:space-between}
+#v2 .mn{padding:36px 44px 60px;max-width:1040px;width:100%}
+#v2 .top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;border-bottom:2px solid var(--ink2);padding-bottom:22px}
+#v2 h1{font-family:Georgia,"Iowan Old Style",serif;font-weight:400;font-size:52px;line-height:1.02;margin:0;letter-spacing:-.02em}
+#v2 .lede{color:var(--mut2);margin:12px 0 0;max-width:46ch;line-height:1.55}
+#v2 .st{display:flex;gap:28px;text-align:right}#v2 .st b{display:block;font-family:Georgia,serif;font-size:34px;font-weight:400}#v2 .st span{font-size:13px;color:var(--mut2)}
+#v2 .lh{display:grid;grid-template-columns:72px 1fr 130px 130px 150px;gap:18px;padding:14px 4px 8px;font-size:13px;color:var(--mut2)}
+#v2 .it{display:grid;grid-template-columns:72px 1fr 130px 130px 150px;gap:18px;align-items:center;padding:18px 4px;border-top:1px solid var(--ln)}
+#v2 .it:hover{background:var(--pan)}
+#v2 .tile{width:72px;height:72px;border-radius:50%;background:#d7e7df;display:grid;place-items:center;font-size:34px}
+#v2 .it h3{margin:0;font-family:Georgia,serif;font-weight:400;font-size:23px}#v2 .it p{margin:4px 0 0;color:var(--mut2);font-size:14px;line-height:1.45}
+#v2 .bar2{height:6px;border-radius:3px;background:#d7e7df;overflow:hidden;margin-bottom:6px}#v2 .bar2 i{display:block;height:100%;background:var(--acc)}
+#v2 .bar2.out i{background:#b42318}#v2 .sk{font-size:13px;color:var(--mut2)}
+#v2 .pr{font-family:Georgia,serif;font-size:24px}
+#v2 .ac{justify-self:end}#v2 .ad{background:var(--ink2);color:#fff;padding:10px 18px;border-radius:99px;font-weight:600}#v2 .ad:hover{background:var(--acc)}
+#v2 .qs{display:flex;align-items:center;border:1.5px solid var(--ink2);border-radius:99px;overflow:hidden}
+#v2 .qs button{width:36px;height:36px;background:none;font-size:18px}#v2 .qs b{min-width:26px;text-align:center}
+#v2 .tbl{width:100%;border-collapse:collapse;margin-top:18px}#v2 .tbl th{text-align:left;font-weight:500;font-size:13px;color:var(--mut2);padding:10px 8px;border-bottom:2px solid var(--ink2)}
+#v2 .tbl td{padding:16px 8px;border-bottom:1px solid var(--ln);font-size:15px}
+#v2 .pill{display:inline-block;padding:3px 11px;border-radius:99px;font-size:13px;font-weight:600}
+#v2 .CONFIRMED{background:#d3efe0;color:#0b5b36}#v2 .PAYMENT_FAILED{background:#fbdad3;color:#9b2c12}#v2 .PENDING_PAYMENT{background:#f7e8b8;color:#6b4e00}
+#v2 .sv{display:flex;justify-content:space-between;align-items:center;padding:20px 4px;border-bottom:1px solid var(--ln);font-family:Georgia,serif;font-size:22px;text-transform:capitalize}
+#v2 .sv.h{margin-top:0}#v2 .gh{background:none;border:1.5px solid var(--ink2);padding:8px 16px;border-radius:99px;font-weight:600}
+#v2 .nt{margin:18px 0 0;padding:13px 16px;border-left:4px solid var(--acc);background:var(--pan);display:flex;justify-content:space-between;gap:12px;font-size:14px}
+#v2 .nt.bad{border-color:#b42318;color:#9b2c12}#v2 .nt button{background:none;font-weight:600;color:inherit}
+#v2 .scrim{position:fixed;inset:0;background:rgba(18,36,31,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+#v2 .scrim.open{opacity:1;pointer-events:auto}
+#v2 .dr{position:fixed;top:0;right:0;height:100%;width:min(400px,100%);background:var(--pan);z-index:21;padding:28px;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s;box-shadow:-12px 0 40px rgba(0,0,0,.15)}
+#v2 .dr.open{transform:none}
+#v2 .dr h2{font-family:Georgia,serif;font-weight:400;font-size:30px;margin:0}
+#v2 .dl{flex:1;overflow:auto;margin:16px 0}
+#v2 .dl div.l{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--ln)}
+#v2 .dt{display:flex;justify-content:space-between;font-family:Georgia,serif;font-size:26px;margin:6px 0 14px}
+#v2 .fl{display:flex;gap:10px;align-items:flex-start;font-size:14px;padding:12px;border:1px dashed var(--mut2);border-radius:8px;margin-bottom:14px;cursor:pointer}
+#v2 .go{background:var(--hot);color:#fff;font-weight:700;padding:15px;border-radius:10px;font-size:16px}
+#v2 button:focus-visible,#v2 input:focus-visible{outline:3px solid #f5b400;outline-offset:2px}
+@media(max-width:860px){
+ #v2{grid-template-columns:1fr}#v2 .sb{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:14px}#v2 .can{display:none}#v2 .bd{margin:0 auto 0 0}#v2 .sb .bt{margin:0}
+ #v2 .mn{padding:24px 16px}#v2 h1{font-size:36px}#v2 .top{flex-direction:column;align-items:flex-start}#v2 .st{text-align:left}
+ #v2 .lh{display:none}#v2 .it{grid-template-columns:56px 1fr;gap:10px 14px}#v2 .tile{width:56px;height:56px;font-size:26px}#v2 .it>*:nth-child(n+3){grid-column:2}#v2 .ac{justify-self:start}
+}
+@media(prefers-reduced-motion:reduce){#v2 *{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="v1">
+<header><div class="wrap bar">
+  <button class="logo" onclick="go('store')"><div class="mark">S</div><div><b>Shop<span>Sphere</span></b><small>Your everyday technology store</small></div></button>
+  <nav>
+    <button id="t-store" onclick="go('store')">Store</button>
+    <button id="t-orders" onclick="go('orders')">Orders</button>
+    <button id="t-services" onclick="go('services')">Services</button>
+    <button class="cart" onclick="go('store');scrollCart()">Cart<i id="cc">0</i></button>
+  </nav>
+</div></header>
+<main class="wrap"><div id="msg"></div><div id="view"></div></main>
+<footer><div class="wrap row"><span>© 2026 ShopSphere. Demo e-commerce platform.</span><span>Powered by Kubernetes microservices</span></div></footer>
+</div>
+<div id="v2"></div>
+
+<script>
+const q0 = new URLSearchParams(location.search);
+const API = (q0.get("api") || "http://localhost:8080").replace(/\/$/, "");
+const FORCE = q0.get("ui");   // optional preview override: ?ui=v1 or ?ui=v2
+const inr = (v) => new Intl.NumberFormat("en-IN", {style:"currency", currency:"INR", maximumFractionDigits:0}).format(v || 0);
+const $ = (id) => document.getElementById(id);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const newKey = () => (crypto.randomUUID ? crypto.randomUUID()
+  : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => { const r = Math.random()*16|0; return (c==="x"?r:(r&3|8)).toString(16); }));
+const ICON = ["📱","📲","🎧"];
+
+let tab = "store", products = [], orders = [], health = null, cart = {}, simFail = false, busy = false, keys = {}, cartOpen = false, flash = "", flashKind = "ok";
+let productVersion = FORCE === "v2" ? "v2" : "v1";
+
+async function api(path, opt) { return fetch(API + path, opt); }
+async function refresh() {
+  try {
+    const [p, o, h] = await Promise.all([api("/api/products"), api("/api/orders"), api("/api/health")]);
+    const productData = await p.json();
+    productVersion = FORCE || (productData.version === "v2" ? "v2" : "v1");
+    products = productData.products || []; orders = (await o.json()).orders || []; health = h.ok ? await h.json() : null;
+  } catch (e) { msg("Could not connect to the API at " + API, "bad"); }
+  render();
+}
+function msg(text, kind) {
+  flash = text || ""; flashKind = kind || "ok";
+  $("msg").innerHTML = text ? `<div class="note ${kind}"><span>${text}</span><button onclick="msg('')">Dismiss</button></div>` : "";
+  if (productVersion === "v2") render();
+}
+function go(t) { tab = t; cartOpen = false; render(); window.scrollTo(0, 0); }
+function openCart(o) { cartOpen = o; render(); }
+function scrollCart() { setTimeout(() => $("cartbox")?.scrollIntoView({behavior:"smooth"}), 50); }
+function items() { return products.filter((p) => cart[p.id] > 0).map((p) => ({...p, qty: cart[p.id]})); }
+function qty(id, d) {
+  const p = products.find((x) => x.id === id); const n = (cart[id] || 0) + d;
+  if (n <= 0) delete cart[id]; else if (n <= p.available) cart[id] = n;
+  render();
+}
+
+function render() {
+  document.body.classList.toggle("is-v2", productVersion === "v2");
+  document.title = productVersion === "v2" ? "ShopSphere · Canary" : "ShopSphere";
+  productVersion === "v2" ? renderV2() : renderV1();
+}
+
+/* ---------- V1 ---------- */
+function renderV1() {
+  ["store","orders","services"].forEach((t) => $("t-" + t).className = tab === t ? "on" : "");
+  const list = items(), count = list.reduce((s, i) => s + i.qty, 0), total = list.reduce((s, i) => s + i.qty * i.price, 0);
+  $("cc").textContent = count;
+  let h = "";
+  if (tab === "store") {
+    h += `<section class="hero"><span class="tag">THE SHOPSPHERE EXPERIENCE</span><h1>Technology that<br>moves you forward.</h1>
+      <p>Discover your next favourite device. Browse products, check live availability, and place your order in a few clicks.</p>
+      <button onclick="document.getElementById('prods').scrollIntoView({behavior:'smooth'})">Explore products</button></section>
+      <div class="sec-h" id="prods"><div><div class="eyebrow">Shop our collection</div><h2>Featured products</h2><p class="sub">Live product and inventory information from our services</p></div>
+      <button class="ghost" onclick="refresh()">↻ Refresh</button></div><div class="grid">`;
+    products.forEach((p, i) => {
+      const q = cart[p.id] || 0, out = p.available <= 0;
+      h += `<article class="card"><div class="pic p${i % 3}">${ICON[i % 3]}</div><div class="body">
+        <div class="row"><span class="chip">${p.category}</span><span class="stock ${out ? "out" : ""}">${out ? "Out of stock" : p.available + " available"}</span></div>
+        <h3>${p.name}</h3><p>${p.description || ""}</p>
+        <div class="row" style="margin-top:16px"><span class="price">${inr(p.price)}</span>
+        ${q === 0 ? `<button class="add" ${out ? "disabled" : ""} onclick="qty(${p.id},1)">Add to cart</button>`
+          : `<div class="step"><button onclick="qty(${p.id},-1)">−</button><b>${q}</b><button ${q >= p.available ? "disabled" : ""} onclick="qty(${p.id},1)">+</button></div>`}
+        </div></div></article>`;
+    });
+    h += `</div><section class="two" id="cartbox"><div class="panel"><h2>Your shopping cart</h2><p class="sub">Review your items before checkout.</p>
+      ${list.length ? list.map((i) => `<div class="line"><div><b>${i.name}</b><div class="sub">${inr(i.price)} × ${i.qty}</div></div><b>${inr(i.price * i.qty)}</b></div>`).join("")
+        : `<div class="empty">Your cart is empty. Add a product to get started.</div>`}</div>
+      <div class="panel"><h2>Order summary</h2>
+      <div class="row sub" style="margin-top:18px"><span>Items (${count})</span><span>${inr(total)}</span></div>
+      <div class="tot"><span>Total</span><span>${inr(total)}</span></div>
+      <label class="sim"><input type="checkbox" ${simFail ? "checked" : ""} onchange="simFail=this.checked"><div><b>Simulate payment failure</b><span>Demo option for testing an unsuccessful payment.</span></div></label>
+      <button class="place" ${!list.length || busy ? "disabled" : ""} onclick="checkout()">${busy ? "Processing checkout..." : "Place order"}</button>
+      <p class="sub" style="text-align:center;font-size:12px">Payment is simulated for this demonstration.</p></div></section>`;
+  } else if (tab === "orders") {
+    h += `<div class="sec-h"><div><div class="eyebrow">Your activity</div><h2>Order history</h2><p class="sub">Orders returned by the ShopSphere Order Service</p></div>
+      <button class="ghost" onclick="refresh()">↻ Refresh orders</button></div>`;
+    h += orders.length ? [...orders].reverse().map((o) => `<article class="order"><div class="row"><div><small class="sub">ORDER ID</small><div class="mono">${o.order_id}</div></div>
+      <span class="badge ${o.status}">${o.status}</span></div>
+      <div class="cols"><div><small>Product</small><div>${o.product?.name || "Product #" + o.product_id}</div></div>
+      <div><small>Quantity</small><div>${o.quantity}</div></div><div><small>Amount</small><div>${inr(o.amount)}</div></div></div></article>`).join("")
+      : `<div class="panel empty">No orders found yet.</div>`;
+  } else {
+    const e = health ? Object.entries(health.services) : [];
+    h += `<div class="eyebrow">Platform overview</div><h2>Service health</h2><p class="sub">Live health checks collected by the API Gateway.</p><div class="svc">` +
+      e.map(([n, s]) => `<div class="panel"><div class="row"><b style="text-transform:capitalize">${n} Service</b><span class="dot ${s === "healthy" ? "" : "bad"}"></span></div>
+      <p style="margin-top:14px;font-weight:700;color:${s === "healthy" ? "#15803d" : "#b91c1c"}">${s.toUpperCase()}</p></div>`).join("") + `</div>`;
+    if (!health) h += `<div class="note bad" style="margin-top:18px">Gateway health information is currently unavailable.</div>`;
+  }
+  $("view").innerHTML = h;
+}
+
+/* ---------- V2 ---------- */
+function renderV2() {
+  const list = items(), count = list.reduce((s, i) => s + i.qty, 0), total = list.reduce((s, i) => s + i.qty * i.price, 0);
+  const units = products.reduce((s, p) => s + (p.available || 0), 0), maxA = Math.max(1, ...products.map((p) => p.available || 0));
+  const nv = (t, label, ic) => `<button class="nv ${tab === t ? "on" : ""}" onclick="go('${t}')"><span>${ic}</span>${label}</button>`;
+  let m = flash ? `<div class="nt ${flashKind}"><span>${flash}</span><button onclick="msg('')">Dismiss</button></div>` : "";
+  if (tab === "store") {
+    m += `<div class="top"><div><h1>Devices worth<br>the upgrade.</h1><p class="lede">Every price and stock level below is read live from the catalogue and inventory services, so what you see is what you can buy.</p></div>
+      <div class="st"><div><b>${products.length}</b><span>models</span></div><div><b>${units}</b><span>units in stock</span></div></div></div>
+      <div class="lh"><span></span><span>Product</span><span>Availability</span><span>Price</span><span></span></div>`;
+    products.forEach((p, i) => {
+      const c = cart[p.id] || 0, out = p.available <= 0;
+      m += `<article class="it"><div class="tile">${ICON[i % 3]}</div><div><h3>${p.name}</h3><p>${p.category}${p.description ? " — " + p.description : ""}</p></div>
+        <div><div class="bar2 ${out ? "out" : ""}"><i style="width:${Math.round((p.available || 0) / maxA * 100)}%"></i></div><span class="sk">${out ? "Out of stock" : p.available + " in stock"}</span></div>
+        <div class="pr">${inr(p.price)}</div>
+        <div class="ac">${c === 0 ? `<button class="ad" ${out ? "disabled" : ""} onclick="qty(${p.id},1)">Add to cart</button>`
+          : `<div class="qs"><button aria-label="Remove one" onclick="qty(${p.id},-1)">−</button><b>${c}</b><button aria-label="Add one" ${c >= p.available ? "disabled" : ""} onclick="qty(${p.id},1)">+</button></div>`}</div></article>`;
+    });
+    if (!products.length) m += `<p class="lede">No products to show yet.</p>`;
+  } else if (tab === "orders") {
+    m += `<div class="top"><div><h1>Your orders</h1><p class="lede">Status updates automatically while a payment is pending.</p></div><button class="gh" onclick="refresh()">Refresh</button></div>`;
+    m += orders.length ? `<table class="tbl"><tr><th>Order</th><th>Product</th><th>Qty</th><th>Amount</th><th>Status</th></tr>` +
+      [...orders].reverse().map((o) => `<tr><td class="mono">${o.order_id}</td><td>${o.product?.name || "Product #" + o.product_id}</td><td>${o.quantity}</td><td>${inr(o.amount)}</td><td><span class="pill ${o.status}">${o.status.replace("_", " ").toLowerCase()}</span></td></tr>`).join("") + `</table>`
+      : `<p class="lede">No orders yet.</p>`;
+  } else {
+    const e = health ? Object.entries(health.services) : [];
+    m += `<div class="top"><div><h1>Service health</h1><p class="lede">Live checks collected by the API gateway.</p></div><button class="gh" onclick="refresh()">Refresh</button></div>` +
+      e.map(([n, s]) => `<div class="sv"><span>${n}</span><span class="pill ${s === "healthy" ? "CONFIRMED" : "PAYMENT_FAILED"}">${s}</span></div>`).join("");
+    if (!health) m += `<div class="nt bad"><span>Gateway health information is currently unavailable.</span></div>`;
+  }
+  const drawer = `<div class="scrim ${cartOpen ? "open" : ""}" onclick="openCart(false)"></div>
+    <aside class="dr ${cartOpen ? "open" : ""}" aria-label="Cart"><div class="row" style="display:flex;justify-content:space-between;align-items:center"><h2>Your cart</h2><button class="gh" onclick="openCart(false)">Close</button></div>
+    <div class="dl">${list.length ? list.map((i) => `<div class="l"><div><b>${i.name}</b><div class="sk">${inr(i.price)} × ${i.qty}</div></div><b>${inr(i.price * i.qty)}</b></div>`).join("") : `<p class="lede">Nothing here yet.</p>`}</div>
+    <div class="dt"><span>Total</span><span>${inr(total)}</span></div>
+    <label class="fl"><input type="checkbox" ${simFail ? "checked" : ""} onchange="simFail=this.checked"><span>Simulate a payment failure (demo only)</span></label>
+    <button class="go" ${!list.length || busy ? "disabled" : ""} onclick="checkout()">${busy ? "Processing…" : "Place order"}</button></aside>`;
+  $("v2").innerHTML = `<aside class="sb"><div class="bd"><span class="bm">S</span>ShopSphere</div><p class="can">Canary build · v2</p>
+    ${nv("store", "Store", "◧")}${nv("orders", "Orders", "☰")}${nv("services", "Services", "◉")}
+    <button class="bt" onclick="openCart(true)"><span>Cart</span><span>${count} · ${inr(total)}</span></button></aside>
+    <section class="mn">${m}</section>${drawer}`;
+}
+
+async function waitOrders(ids) {
+  let last = [];
+  for (let i = 0; i < 60; i++) {
+    last = await Promise.all(ids.map(async (id) => { const r = await api("/api/orders/" + id); return r.ok ? r.json() : {order_id: id, status: "PENDING_PAYMENT"}; }));
+    if (last.every((o) => o.status !== "PENDING_PAYMENT")) break;
+    msg(`Waiting for payment confirmation (${last.filter((o) => o.status === "PENDING_PAYMENT").length} pending)...`, "ok");
+    await sleep(1500);
+  }
+  return last;
+}
+
+async function checkout() {
+  const list = items(); if (!list.length) return;
+  busy = true; msg(""); render();
+  try {
+    const accepted = [];
+    for (const it of list) {
+      const id = `${it.id}:${it.qty}:${simFail}`;
+      keys[id] = keys[id] || newKey();                    // one key per attempt, reused on retry
+      const r = await api("/api/checkout", {method: "POST",
+        headers: {"Content-Type": "application/json", "Idempotency-Key": keys[id]},
+        body: JSON.stringify({product_id: it.id, quantity: it.qty, simulate_failure: simFail})});
+      const d = await r.json();
+      if (r.status !== 202) { delete keys[id]; throw new Error(typeof d.detail === "string" ? d.detail : d.detail?.message || "Checkout failed"); }
+      accepted.push(d.order_id);
+    }
+    msg("Order placed. Waiting for payment confirmation...", "ok");
+    const fin = await waitOrders(accepted);
+    const c = fin.filter((o) => o.status === "CONFIRMED").length, f = fin.filter((o) => o.status === "PAYMENT_FAILED").length, p = fin.length - c - f;
+    msg(`${fin.length} order(s) placed. ${c} confirmed, ${f} payment failed` + (p ? `, ${p} still pending.` : "."), f ? "bad" : "ok");
+    keys = {}; cart = {}; tab = "orders"; cartOpen = false;
+  } catch (e) { msg(e.message || "Checkout failed", "bad"); }
+  busy = false; await refresh();
+}
+
+setInterval(() => { if (tab === "orders" && orders.some((o) => o.status === "PENDING_PAYMENT")) refresh(); }, 3000);
+render();
+refresh();
+</script>
+</body>
+</html>

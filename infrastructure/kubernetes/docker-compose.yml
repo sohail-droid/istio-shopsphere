@@ -1,0 +1,39 @@
+# Local run:  docker compose up --build
+# Then:       python scripts/e2e_test.py http://localhost:8000
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+
+  product-service:
+    build: ./services/product-service
+
+  inventory-service:
+    build: ./services/inventory-service
+
+  payment-service:
+    build: ./services/payment-service
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      PSP_WEBHOOK_SECRET: local-dev-secret
+    depends_on: [redis]
+
+  order-service:
+    build: ./services/order-service
+    environment:
+      PRODUCT_SERVICE_URL: http://product-service:8000
+      INVENTORY_SERVICE_URL: http://inventory-service:8000
+      PAYMENT_SERVICE_URL: http://payment-service:8000
+      REDIS_URL: redis://redis:6379/0
+    depends_on: [redis, product-service, inventory-service, payment-service]
+
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      PRODUCT_SERVICE_URL: http://product-service:8000
+      INVENTORY_SERVICE_URL: http://inventory-service:8000
+      ORDER_SERVICE_URL: http://order-service:8000
+      PAYMENT_SERVICE_URL: http://payment-service:8000
+    depends_on: [order-service]

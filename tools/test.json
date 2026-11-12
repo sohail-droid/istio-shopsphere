@@ -1,0 +1,210 @@
+Name:             order-service-cdcd79487-hntw9
+Namespace:        shopsphere
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Wed, 11 Nov 2026 22:27:32 +0530
+Labels:           app=order-service
+                  pod-template-hash=cdcd79487
+                  security.istio.io/tlsMode=istio
+                  service.istio.io/canonical-name=order-service
+                  service.istio.io/canonical-revision=latest
+Annotations:      istio.io/rev: default
+                  kubectl.kubernetes.io/default-container: order-service
+                  kubectl.kubernetes.io/default-logs-container: order-service
+                  kubectl.kubernetes.io/restartedAt: 2026-11-11T22:27:32+05:30
+                  prometheus.io/path: /stats/prometheus
+                  prometheus.io/port: 15020
+                  prometheus.io/scrape: true
+                  sidecar.istio.io/status:
+                    {"initContainers":["istio-init","istio-proxy"],"containers":null,"volumes":["workload-socket","credential-socket","workload-certs","istio-...
+Status:           Running
+IP:               10.244.0.19
+IPs:
+  IP:           10.244.0.19
+Controlled By:  ReplicaSet/order-service-cdcd79487
+Init Containers:
+  istio-init:
+    Container ID:  containerd://a5d0b508484ee8f76213ec2de4581339a9223d2c6779aa5bf34d2b6f110248a7
+    Image:         docker.io/istio/proxyv2:1.31.4
+    Image ID:      docker.io/istio/proxyv2@sha256:04f0f4a8d494f17ae6c67ee400194f646f90460a220811acaaedafb0c332dd1d
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      istio-iptables
+      -p
+      15001
+      -z
+      15006
+      -u
+      1337
+      -m
+      REDIRECT
+      -i
+      *
+      -x
+      
+      -b
+      *
+      -d
+      15090,15021,15020
+      --log_output_level=default:info
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Wed, 11 Nov 2026 22:27:32 +0530
+      Finished:     Wed, 11 Nov 2026 22:27:33 +0530
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     2
+      memory:  1Gi
+    Requests:
+      cpu:        10m
+      memory:     40Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-d8ng9 (ro)
+  istio-proxy:
+    Container ID:  containerd://5586fb3f5e0728841caa425e3b8b8347f4761471c7ac93c85919ab8d02d99a7b
+    Image:         docker.io/istio/proxyv2:1.31.4
+    Image ID:      docker.io/istio/proxyv2@sha256:04f0f4a8d494f17ae6c67ee400194f646f90460a220811acaaedafb0c332dd1d
+    Port:          15090/TCP (http-envoy-prom)
+    Host Port:     0/TCP (http-envoy-prom)
+    Args:
+      proxy
+      sidecar
+      --domain
+      $(POD_NAMESPACE).svc.cluster.local
+      --proxyLogLevel=warning
+      --proxyComponentLogLevel=misc:error
+      --log_output_level=default:info
+    State:          Running
+      Started:      Wed, 11 Nov 2026 22:27:33 +0530
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     2
+      memory:  1Gi
+    Requests:
+      cpu:      10m
+      memory:   40Mi
+    Readiness:  http-get http://:15021/healthz/ready delay=0s timeout=3s period=15s #success=1 #failure=4
+    Startup:    http-get http://:15021/healthz/ready delay=0s timeout=3s period=1s #success=1 #failure=600
+    Environment:
+      PILOT_CERT_PROVIDER:           istiod
+      CA_ADDR:                       istiod.istio-system.svc:15012
+      POD_NAME:                      order-service-cdcd79487-hntw9 (v1:metadata.name)
+      POD_NAMESPACE:                 shopsphere (v1:metadata.namespace)
+      INSTANCE_IP:                    (v1:status.podIP)
+      SERVICE_ACCOUNT:                (v1:spec.serviceAccountName)
+      HOST_IP:                        (v1:status.hostIP)
+      ISTIO_CPU_LIMIT:               2 (limits.cpu)
+      PROXY_CONFIG:                  {}
+                                     
+      ISTIO_META_POD_PORTS:          [
+                                         {"name":"http","containerPort":8000,"protocol":"TCP"}
+                                     ]
+      ISTIO_META_APP_CONTAINERS:     order-service
+      GOMEMLIMIT:                    1073741824 (limits.memory)
+      GOMAXPROCS:                    2 (limits.cpu)
+      ISTIO_META_CLUSTER_ID:         Kubernetes
+      ISTIO_META_NODE_NAME:           (v1:spec.nodeName)
+      ISTIO_META_INTERCEPTION_MODE:  REDIRECT
+      ISTIO_META_WORKLOAD_NAME:      order-service
+      ISTIO_META_OWNER:              kubernetes://apis/apps/v1/namespaces/shopsphere/deployments/order-service
+      ISTIO_META_MESH_ID:            cluster.local
+      TRUST_DOMAIN:                  cluster.local
+      ISTIO_KUBE_APP_PROBERS:        {"/app-health/order-service/livez":{"httpGet":{"path":"/health","port":8000,"scheme":"HTTP"},"timeoutSeconds":1},"/app-health/order-service/readyz":{"httpGet":{"path":"/health","port":8000,"scheme":"HTTP"},"timeoutSeconds":1}}
+    Mounts:
+      /etc/istio/pod from istio-podinfo (rw)
+      /etc/istio/proxy from istio-envoy (rw)
+      /var/lib/istio/data from istio-data (rw)
+      /var/run/secrets/credential-uds from credential-socket (rw)
+      /var/run/secrets/istio from istiod-ca-cert (rw)
+      /var/run/secrets/istio/crl from istio-ca-crl (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-d8ng9 (ro)
+      /var/run/secrets/tokens from istio-token (rw)
+      /var/run/secrets/workload-spiffe-credentials from workload-certs (rw)
+      /var/run/secrets/workload-spiffe-uds from workload-socket (rw)
+Containers:
+  order-service:
+    Container ID:   containerd://3bed8ab5510b18afce2e01e3db01c9bb6a088e191ddb83f548727fe1f694eeb5
+    Image:          imastha8/order-service:2.0.0
+    Image ID:       docker.io/imastha8/order-service@sha256:0cd46638a543fee99a257be50b7d6c93da5b565024db350f7133832f9fb3b367
+    Port:           8000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Wed, 11 Nov 2026 22:27:42 +0530
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:15020/app-health/order-service/livez delay=10s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:15020/app-health/order-service/readyz delay=5s timeout=1s period=5s #success=1 #failure=3
+    Environment:
+      PRODUCT_SERVICE_URL:    http://product-service:8000
+      INVENTORY_SERVICE_URL:  http://inventory-service:8000
+      PAYMENT_SERVICE_URL:    http://payment-service:8000
+      REDIS_URL:              redis://redis:6379/0
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-d8ng9 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  workload-socket:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  credential-socket:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  workload-certs:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  istio-envoy:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  <unset>
+  istio-data:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  istio-podinfo:
+    Type:  DownwardAPI (a volume populated by information about the pod)
+    Items:
+      metadata.labels -> labels
+      metadata.annotations -> annotations
+  istio-token:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  43200
+  istiod-ca-cert:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      istio-ca-root-cert
+    Optional:  false
+  istio-ca-crl:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      istio-ca-crl
+    Optional:  true
+  kube-api-access-d8ng9:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:                      <none>

@@ -1,0 +1,10 @@
+
+# Istio binaries & local tools
+tools/istio-1.31.4/
+*.tar.gz
+
+# Backups and Python cache
+backups/
+*.backup
+__pycache__/
+*.py[cod]
